@@ -27,7 +27,7 @@ class MyTableWidget(QTableWidget):
         self.cellClicked.connect(self.handleCellClick)
 
     def handleCellClick(self, item):
-        print(item)
+        print(self.item(item, 0).text())
 
     def handleItemClick(self, item):
         print(item.text())
