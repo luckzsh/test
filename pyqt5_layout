@@ -3,7 +3,7 @@
 import sys
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication,    QHBoxLayout,  \
-    QVBoxLayout, QScrollBar, QTableWidget, QAbstractItemView, QTableWidgetItem
+    QVBoxLayout, QScrollBar, QTableWidget, QAbstractItemView, QTableWidgetItem, QFrame,QHeaderView
 
 
 class MyTableWidget(QTableWidget):
@@ -16,13 +16,31 @@ class MyTableWidget(QTableWidget):
         self.setItem(0, 0, QTableWidgetItem("qwer"))  # 添加表项
         self.setItem(0,1,newItem)  # 添加表项
         self.setHorizontalHeaderLabels(["a", "b"])
-        self.horizontalHeader().setVisible(False)  # 表格表头的显示与隐藏
+        self.horizontalHeader().setVisible(True)  # 表格表头的显示与隐藏
+        self.verticalHeader().setVisible(True)
         self.setShowGrid(False)  # True显示网格线
+
+        self.setStyleSheet(  # 设置表格样式
+            "color:green;"
+            "background:white;"
+            "selection-color:red;"
+            "selection-background-color:lightgray;"
+            "border:1px solid gray;"
+        )
+        self.horizontalHeader().setStyleSheet("background:skyblue;")
+
         self.setSelectionBehavior(QAbstractItemView.SelectRows)  # 以行为单位
         self.setSelectionMode(QAbstractItemView.SingleSelection)  # 选择单行
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.table.resizeColumnsToContents()  # 将列调整到跟内容大小相匹配
-        self.resizeRowsToContents()  # 将行大小调整到跟内容的大小相匹配
+
+        # self.resizeColumnsToContents()  # 将列调整到跟内容大小相匹配
+        # self.resizeRowsToContents()  # 将行大小调整到跟内容的大小相匹配
+        # self.verticalHeader().setDefaultSectionSize(20)
+        # self.horizontalHeader().setDefaultSectionSize(60)
+        self.horizontalHeader().setStretchLastSection(True)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)  # x先自适应宽度
+        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)  # 然后设置要根据内容使用宽度的列
+
         self.itemClicked.connect(self.handleItemClick)  # 将itemClicked信号与函数绑定
         self.cellClicked.connect(self.handleCellClick)
 
