@@ -1,0 +1,64 @@
+# -*- coding:utf-8 -*-
+
+import sys
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication,    QHBoxLayout,  \
+    QVBoxLayout, QScrollBar, QTableWidget, QAbstractItemView, QTableWidgetItem
+
+
+class MyTableWidget(QTableWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setColumnCount(2)
+        self.setRowCount(10)
+        newItem = QTableWidgetItem("abcde")
+        self.setItem(0, 0, QTableWidgetItem("qwer"))  # 添加表项
+        self.setItem(0,1,newItem)  # 添加表项
+        self.setHorizontalHeaderLabels(["a", "b"])
+        self.horizontalHeader().setVisible(False)  # 表格表头的显示与隐藏
+        self.setShowGrid(False)  # True显示网格线
+        self.setSelectionBehavior(QAbstractItemView.SelectRows)  # 以行为单位
+        self.setSelectionMode(QAbstractItemView.SingleSelection)  # 选择单行
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # self.table.resizeColumnsToContents()  # 将列调整到跟内容大小相匹配
+        self.resizeRowsToContents()  # 将行大小调整到跟内容的大小相匹配
+        self.itemClicked.connect(self.handleItemClick)  # 将itemClicked信号与函数绑定
+        self.cellClicked.connect(self.handleCellClick)
+
+    def handleCellClick(self, item):
+        print(item)
+
+    def handleItemClick(self, item):
+        print(item.text())
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setMinimumSize(580, 560)
+        self.chart = QWidget()
+        self.chart.setMinimumSize(468, 438)
+        self.scrollbar = QScrollBar(Qt.Horizontal, self)
+
+        self.table = MyTableWidget()
+
+        w = QWidget()
+        hbox = QHBoxLayout()
+        vbox = QVBoxLayout()
+        vbox.setSpacing(0)
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(self.chart)
+        vbox.addWidget(self.scrollbar)
+        hbox.addWidget(self.table)
+        hbox.addLayout(vbox)
+        w.setLayout(hbox)
+        # w.setLayout(vbox)
+        self.setCentralWidget(w)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    test = MainWindow()
+    test.show()
+    sys.exit(app.exec_())
